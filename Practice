@@ -1,1 +1,39 @@
+#include <stdio.h> // 전처리기
+
+int main(void) //함수 헤더
+{
+	printf("Hello World\n");  // 화면 출력
+
+	return 0;  //함수 종료
+}
+
+#include <stdio.h>
+
+int main(void) {
+	int a, b; //정수형 변수 2개를 한 줄에 선언
+	int sum; // 정수형 변수 1개 선언
+
+	a = 10;  //a에 10을 대입
+	b = 20;  //b에 10을 대입
+
+	sum =a+ b; //a+b 연산 결과를 sum변수에 대입
+	printf("sum= %d\n", sum);
+
+	return 0;
+}
+
+//아래 예제는 키보드로부터 값을 입력받는 scanf() 함수가 추가된 것
+
+int main(void) {
+	int a, b;
+	int sum;
+
+	scanf("%d", &a); //값을 입력하여 정수형 변수 a 저장
+	scanf("d%", &b); // 값을 입력하여 정수형 변수 b 저장
+
+	sum = a + b;
+
+	printf("sum= %d\n", sum); //결과를 화면에 출력
+	return 0;
+}
 
