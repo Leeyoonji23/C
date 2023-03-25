@@ -1,0 +1,46 @@
+#include<stdio.h>
+#define MAX_STACK_SIZE 100
+ 
+int stack[MAX_STACK_SIZE];      //스택의 사이즈 100으로 지정 
+int top=-1;     
+ 
+int IsEmpty(){      //스택이 비어있나? 확인하는 함수임
+    if(top<0)       //맨 위가 -1이라면 비어있는거
+        return true;
+    else            //하나라도 들어있으면 X
+        return false;
+    }
+
+
+int IsFull(){       //스택이 꽉 차있나? 확인하는 함수임
+    if(top>=MAX_STACK_SIZE-1)   //맨 위가 99보다 같거나 크면
+        return true;            //꽉 찬거임
+    else                
+        return false;
+}
+ 
+void push(int value){       //스택에 데이터 삽입
+    if(IsFull()==true)      //스택이 가득 차면
+        printf("스택이 가득 찼습니다.");
+    else                    //빈 공간이 있으면
+        stack[++top]=value; //위치를 한 칸 올려주고 데이터 삽입             (공간을 미리 마련해주기 위해 ++top인거야)
+}
+ 
+int pop(){                  //데이터 빼기
+    if(IsEmpty()==true)     //스택이 비어있으면
+        printf("스택이 비었습니다.");
+    else                    //데이터가 있으면
+        return stack[top--];    //top에 있는 데이터 빼고 위치 한 칸 내려줌   (짐부터 빼고 집을 줄여야지)
+}
+ 
+int main(){
+    
+    push(3);
+    push(5);
+    push(12);
+    printf("%d ",pop());
+    printf("%d ",pop());
+    printf("%d ",pop());
+ 
+    return 0;
+}
