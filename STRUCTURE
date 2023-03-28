@@ -1,1 +1,185 @@
+#include<stdio.h>
+#define MAX 100
 
+typedef struct
+{
+	int rows;
+	int cols;
+	int value;
+} element;	//����� �⺻ ����ü
+
+typedef struct SparaseMatrix
+{
+	element data[MAX];
+	int rows;	//���� ����
+	int cols;	//���� ����
+	int terms;	//���� ����
+} SparaseMatrix;	//�������� ��Ÿ���� ����ü
+
+
+SparaseMatrix change_to_SP(int a[8][10]) //������ �迭�� ����� �������� SparseMatrix ������ ����
+{
+	SparaseMatrix A;
+
+	A.cols = 10; //a��  ��
+	A.rows = 8; //a�� ��
+
+	int k = 0;
+
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 10; j++) {
+			if (a[i][j] != 0) {
+				A.data[k].rows = i;
+				A.data[k].cols = j;
+				A.data[k].value = a[i][j];
+				//if(k ==0)
+				printf("%2d %2d %2d \n", A.data[k].rows, A.data[k].cols, A.data[k].value);
+				k++;
+			}
+
+		}
+	}
+	A.terms = k;
+
+
+	printf("\n\n");
+
+	return A;
+}
+
+SparaseMatrix add(SparaseMatrix A, SparaseMatrix B) {
+	SparaseMatrix C;
+	int ca = 0, cb = 0, cc = 0;
+	int inda = 0, indb = 0;
+	if (A.rows != B.rows || A.cols != B.cols)
+		printf("ERROR\n");
+
+	C.rows = A.rows;
+	C.cols = A.cols;
+	C.terms = 0;
+	while (ca < A.terms && cb < B.terms) {
+		int inda = A.data[ca].rows * A.cols + A.data[ca].cols;
+		int indb = B.data[cb].rows * B.cols + B.data[cb].cols;
+
+		if (inda < indb)
+			C.data[cc++] = A.data[ca++];
+		else if (inda == indb) {
+			if ((A.data[ca].value + B.data[cb].value) != 0) {
+				C.data[cc].rows = A.data[ca].rows;
+				C.data[cc].cols = A.data[ca].cols;
+				C.data[cc++].value = (A.data[ca++].value + B.data[cb++].value);
+			}
+			else {
+				ca++;
+				cb++;
+			}
+		}
+		else
+			C.data[cc++] = B.data[cb++];
+	}
+	for (; ca < A.terms;)
+		C.data[cc++] = A.data[ca++];
+
+	for (; cb < B.terms;)
+		C.data[cc++] = B.data[cb++];
+
+	C.terms = cc;
+	return C;
+}
+
+
+
+void matrix_print(SparaseMatrix a)
+{
+	printf("====================\n");
+	for (int i = 0; i < a.terms; i++) {
+		printf("(%d, %d, %d) \n", a.data[i].rows, a.data[i].cols, a.data[i].value);
+	}
+	printf("====================\n");
+}
+
+
+
+
+int main(void)
+{
+	int a[8][10] = { { 0, 0, 0, 0, 2, 0, 0, 0, 0, 0 },
+
+						 { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 },
+
+						 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+
+						 { 0, 0, 0, 0, 0, 0, 0,-3, 0, 0 },
+
+						 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+
+						 { 0,-1, 0, 0, 0, 0, 0, 0, 0, 0 },
+
+						 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+
+						 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
+
+
+
+	int b[8][10] = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+
+
+							 { 0, 0, 0,-1, 0, 0, 0, 0, 0, 0 },
+
+							 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+
+							 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+
+							 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+
+							 { 0, 0, 0, 0, 2, 0, 0, 0, 0, 0 },
+
+							 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+
+							 { 0, 0, 0, 0, 0, 0, 2, 0, 0, 0 } };
+
+
+
+	int c[8][10] = { { 0, 0, 0, 0,-2, 0, 0, 0, 0, 0 },
+
+							 { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 },
+
+							 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 },
+
+							 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+
+							 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+
+							 { 0, 0, 0, 0,-2, 0, 0, 0, 0, 0 },
+
+							 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+
+							 { 0, 0, 0, 0, 0, 0, 4, 0, 0, 0 } };
+
+
+	printf("a \n");
+	SparaseMatrix A = change_to_SP(a);
+
+	printf("b\n");
+	SparaseMatrix B = change_to_SP(b);
+
+	printf("c\n");
+	SparaseMatrix C = change_to_SP(c);
+
+	printf("[a�� b ���ϱ�]\n");
+	SparaseMatrix AB = add(A, B);
+	matrix_print(AB);
+
+	printf("\n\n[a�� c ���ϱ�]\n");
+	SparaseMatrix AC = add(A, C);
+	matrix_print(AC);
+
+	printf("\n\n[b�� c ���ϱ�]\n");
+	SparaseMatrix BC = add(B, C);
+	matrix_print(BC);
+
+	return 0;
+}
+
+
+	
